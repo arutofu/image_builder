@@ -20,7 +20,8 @@ jobs:
 
       - name: List files for debugging
         run: |
-          ls -la /builder/repo/builder/
+          ls -la /builder/
+          ls -la /builder/repo/
 
       - name: Build image
         run: |
