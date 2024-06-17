@@ -18,14 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: List files for debugging
-        run: |
-          ls -la /repo/
-          ls -la /repo/builder/
-
       - name: Build image
         run: |
-          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo sfalexrog/img-tool:qemu-update /bin/sh -c "chmod +x /builder/repo/builder/image-build.sh && /builder/repo/builder/image-build.sh"
+          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo -e TRAVIS_TAG="${{ github.event.release.tag_name }}" sfalexrog/img-tool:qemu-update
 
       - name: Compress image
         run: |
