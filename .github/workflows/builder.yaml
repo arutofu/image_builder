@@ -20,13 +20,14 @@ jobs:
 
       - name: Build image
         run: |
-          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo sfalexrog/img-tool:qemu-update
+          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo sfalexrog/img-tool:qemu-update /bin/sh -c "chmod +x /builder/repo/builder/image-build.sh && /builder/repo/builder/image-build.sh"
 
       - name: Compress image
         run: |
           cd images && sudo chmod -R 777 . && zip -9 image.zip *_* && ls -l . && unzip -l image.zip
 
       - name: Upload image to release
+        if: github.event_name == 'release'
         uses: actions/upload-artifact@v2
         with:
           path: images/image.zip
