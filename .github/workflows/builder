@@ -3,10 +3,10 @@ name: RPi image
 on:
   push:
     branches: 
-      - main
+      - master
   pull_request:
     branches: 
-      - main
+      - master
   release:
     types: 
       - created
@@ -19,17 +19,14 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build image
-        if: github.event_name != 'release'
         run: |
           docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo sfalexrog/img-tool:qemu-update
 
       - name: Compress image
-        if: github.event_name != 'release'
         run: |
           cd images && sudo chmod -R 777 . && zip -9 image.zip *_* && ls -l . && unzip -l image.zip
 
       - name: Upload image to release
-        if: github.event_name == 'release'
         uses: actions/upload-artifact@v2
         with:
           path: images/image.zip
