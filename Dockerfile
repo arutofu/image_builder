@@ -1,21 +1,10 @@
-# Используем официальный образ Ubuntu
-FROM ubuntu:20.04
+FROM debian:buster
 
-# Устанавливаем переменную окружения для автоматического выбора временной зоны
-ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y debootstrap qemu-user-static binfmt-support
 
-# Устанавливаем временную зону и необходимые пакеты
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y tzdata wget unzip parted kmod dosfstools debootstrap udev sudo qemu-user-static && \
-    ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
-    dpkg-reconfigure --frontend noninteractive tzdata && \
-    apt-get clean
+COPY builder /builder
 
-# Копируем скрипты в контейнер
-COPY scripts/ /workspace/scripts/
+WORKDIR /builder
 
-# Делаем скрипт исполняемым
-RUN chmod +x /workspace/scripts/build_image.sh
-
-# Устанавливаем рабочую директорию
-WORKDIR /workspace
+CMD ["bash", "image-build.sh"]
