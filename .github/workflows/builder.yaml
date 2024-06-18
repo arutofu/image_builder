@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set execute permissions
+        run: chmod +x ./builder/*.sh && chmod +x ./builder/assets/*.sh
+
       - name: Output event data for debugging
         run: |
           echo -e "\033[1;34mGitHub event data:\033[0m"
