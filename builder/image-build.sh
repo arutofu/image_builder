@@ -72,10 +72,16 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh'
 # Copy cloned repository to the image
 # Include dotfiles in globs (asterisks)
 shopt -s dotglob
+
+for dir in ${REPO_DIR}/*; do
+  echo "Files in directory ${dir}:"
+  ls -l ${dir}
+done
+
 for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
   if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
-    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/drone/'
+    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/clover/'
   fi;
 done
 
