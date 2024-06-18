@@ -78,6 +78,10 @@ for dir in ${REPO_DIR}/*; do
   ls -l ${dir}
 done
 
+# Print directories starting from /home/
+echo "Directories starting from /home/:"
+find /home -type d -printf "%p\n"
+
 for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
   if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
