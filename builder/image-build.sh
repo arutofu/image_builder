@@ -69,6 +69,12 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/init_rp
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/hardware_setup.sh' '/root/'
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh' ${IMAGE_VERSION} ${SOURCE_IMAGE}
 
+echo "!!!!! image-resize.sh !!!!!"
+cat ${BUILDER_DIR}/image-resize.sh
+
+echo "!!!!! image-chroot.sh !!!!!"
+cat ${BUILDER_DIR}/image-chroot.sh
+
 # Ensure the target directory exists
 TARGET_DIR='/home/pi/catkin_ws/src/clover/'
 if [ ! -d "$TARGET_DIR" ]; then
@@ -83,7 +89,7 @@ shopt -s dotglob
 for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
   if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
-    echo "Copying contents of $dir to ${IMAGE_PATH}/$TARGET_DIR"
+    echo "Copying contents of $dir to ${IMAGE_PATH}$TARGET_DIR"
     ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
   fi
 done
