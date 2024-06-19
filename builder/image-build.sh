@@ -84,15 +84,15 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh'
 
 # Copy cloned repository to the image
 # Include dotfiles in globs (asterisks)
-#shopt -s dotglob
+shopt -s dotglob
 
-#for dir in ${REPO_DIR}/*; do
+for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
-#  if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
-#    echo "Copying contents of $dir to ${IMAGE_PATH}$TARGET_DIR"
-#    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
-#  fi
-#done
+  if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
+    echo "Copying contents of $dir to ${IMAGE_PATH}$TARGET_DIR"
+    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
+  fi
+done
 
 # Monkey
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey' '/root/'
