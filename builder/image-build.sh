@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e # Exit immidiately on non-zero result
 
 # https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit
@@ -69,28 +71,9 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/init_rp
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/hardware_setup.sh' '/root/'
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh' ${IMAGE_VERSION} ${SOURCE_IMAGE}
 
-#echo "!!!!! image-resize.sh !!!!!"
-#cat ${BUILDER_DIR}/image-resize.sh
-
-#echo "!!!!! image-chroot.sh !!!!!"
-#cat ${BUILDER_DIR}/image-chroot.sh
-
-#Ensure the target directory exists
-if [ ! -d "/home/pi/catkin_ws/" ]; then
-    mkdir -p "/home/pi/catkin_ws/"
-    echo "/home/pi/catkin_ws/ dir created"
-fi
-
-if [ ! -d "/home/pi/catkin_ws/src/" ]; then
-    mkdir -p "/home/pi/catkin_ws/src/"
-    echo "/home/pi/catkin_ws/src/ dir created"
-fi
-
-TARGET_DIR='/home/pi/catkin_ws/src/drone/'
-if [ ! -d "$TARGET_DIR" ]; then
-    mkdir -p "$TARGET_DIR"
-    echo "Target dir created"
-fi
+# Ensure the target directory exists
+TARGET_DIR='/home/pi/catkin_ws/src/drone'
+${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} mkdir -p ${TARGET_DIR}
 
 # Copy cloned repository to the image
 # Include dotfiles in globs (asterisks)
@@ -99,23 +82,10 @@ shopt -s dotglob
 for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
   if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
-
     echo "Copying contents of $dir to ${IMAGE_PATH}$TARGET_DIR"
-
-    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/drone/'
-    #${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
-
-  fi;
+    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${TARGET_DIR}
+  fi
 done
-
-
-for dir in ${REPO_DIR}/*; do
-  # Don't try to copy image into itself
-  if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
-    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/clover/'
-  fi;
-done
-
 
 # Monkey
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey' '/root/'
@@ -132,17 +102,5 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-software
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-network.sh'
 # avahi setup
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/avahi-services/sftp-ssh.service' '/etc/avahi/services'
-
-# If RPi then use a one thread to build a ROS package on RPi, else use all
-# [[ $(arch) == 'armv7l' ]] && NUMBER_THREADS=1 || NUMBER_THREADS=$(nproc --all)
-# Drone
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/noetic-rosdep-clover.yaml' '/etc/ros/rosdep/'
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/ros_python_paths' '/etc/sudoers.d/'
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/pigpiod.service' '/lib/systemd/system/'
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/launch.nanorc' '/usr/share/nano/'
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/kinetic-ros-clover.rosinstall' '/home/pi/ros_catkin_ws/'
-# Add rename script
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-ros.sh' ${REPO_URL} ${IMAGE_VERSION} false false ${NUMBER_THREADS}
-# ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-validate.sh'
 
 ${BUILDER_DIR}/image-resize.sh ${IMAGE_PATH}

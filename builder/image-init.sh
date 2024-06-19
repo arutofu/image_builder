@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e # Exit immidiately on non-zero result
 
 echo_stamp() {
@@ -43,3 +45,6 @@ sed -i 's/#SystemMaxUse=/SystemMaxUse=200M/' /etc/systemd/journald.conf
 
 echo_stamp "Move /etc/ld.so.preload out of the way"
 mv /etc/ld.so.preload /etc/ld.so.preload.disabled-for-build
+
+echo_stamp "Create necessary directories for catkin workspace"
+mkdir -p /home/pi/catkin_ws/src
