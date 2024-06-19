@@ -76,6 +76,16 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh'
 #cat ${BUILDER_DIR}/image-chroot.sh
 
 #Ensure the target directory exists
+if [ ! -d "/home/pi/catkin_ws/" ]; then
+    mkdir -p "/home/pi/catkin_ws/"
+    echo "/home/pi/catkin_ws/ dir created"
+fi
+
+if [ ! -d "/home/pi/catkin_ws/src/" ]; then
+    mkdir -p "/home/pi/catkin_ws/src/"
+    echo "/home/pi/catkin_ws/src/ dir created"
+fi
+
 TARGET_DIR='/home/pi/catkin_ws/src/drone/'
 if [ ! -d "$TARGET_DIR" ]; then
     mkdir -p "$TARGET_DIR"
