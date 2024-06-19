@@ -75,12 +75,12 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-init.sh'
 #echo "!!!!! image-chroot.sh !!!!!"
 #cat ${BUILDER_DIR}/image-chroot.sh
 
-# Ensure the target directory exists
-#TARGET_DIR='/home/pi/catkin_ws/src/clover/'
-#if [ ! -d "$TARGET_DIR" ]; then
-#    mkdir -p "$TARGET_DIR"
-#    echo "Target dir created"
-#fi
+ Ensure the target directory exists
+TARGET_DIR='/home/pi/catkin_ws/src/drone/'
+if [ ! -d "$TARGET_DIR" ]; then
+    mkdir -p "$TARGET_DIR"
+    echo "Target dir created"
+fi
 
 # Copy cloned repository to the image
 # Include dotfiles in globs (asterisks)
@@ -89,10 +89,23 @@ shopt -s dotglob
 for dir in ${REPO_DIR}/*; do
   # Don't try to copy image into itself
   if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
+  
     echo "Copying contents of $dir to ${IMAGE_PATH}$TARGET_DIR"
-    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
-  fi
+
+    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/drone/'
+    #${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir ${IMAGE_PATH}$TARGET_DIR
+
+  fi;
 done
+
+
+for dir in ${REPO_DIR}/*; do
+  # Don't try to copy image into itself
+  if [[ $dir != *"images" && $dir != *"imgcache" ]]; then
+    ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy $dir '/home/pi/catkin_ws/src/clover/'
+  fi;
+done
+
 
 # Monkey
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey' '/root/'
