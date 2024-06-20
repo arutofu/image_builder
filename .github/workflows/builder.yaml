@@ -70,11 +70,13 @@ jobs:
           fi
 
       - name: Upload image to release
-        if: github.event_name == 'release'
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
+        if: ${{ github.event_name == 'release' }}
         with:
-          path: images/image.zip
-          name: image.zip
+          files: images/image*.zip
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload image as artifact
         if: github.event_name != 'release'
@@ -82,3 +84,6 @@ jobs:
         with:
           path: images/image.zip
           name: image.zip
+
+
+
