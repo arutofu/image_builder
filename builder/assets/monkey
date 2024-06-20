@@ -21,7 +21,7 @@
     #      DocumentRoot /home/krypton/htdocs
 
     #DocumentRoot /home/pi/.ros/www
-    DocumentRoot /home/pi/catkin_ws/src/drone/www
+    DocumentRoot /home/pi/catkin_ws/src/drone/drone/www
 
     # Redirect:
     # ---------
