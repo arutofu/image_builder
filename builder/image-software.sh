@@ -171,25 +171,4 @@ gpgconf --kill dirmngr
 # We ignore pkill's exit value as well.
 pkill -9 -f dirmngr || true
 
-
-
-# Update package list and upgrade all packages
-apt-get update
-apt-get upgrade -y
-
-# Install necessary packages
-apt-get install -y <other-packages>
-
-# Install File Browser
-curl -fsSL https://filebrowser.org/get.sh | bash
-
-# Copy filebrowser service file
-cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
-
-# Enable and start filebrowser service
-systemctl enable filebrowser.service
-systemctl start filebrowser.service
-
-
-
 echo_stamp "End of software installation"
