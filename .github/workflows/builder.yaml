@@ -69,13 +69,6 @@ jobs:
             echo -e "\033[1;32mimage.zip created successfully!\033[0m"
           fi
 
-      - name: Upload image as artifact
-        if: github.event_name != 'release'
-        uses: actions/upload-artifact@v2
-        with:
-          path: images/image.zip
-          name: image.zip
-
       - name: Upload image to release
         uses: softprops/action-gh-release@v1
         if: ${{ github.event_name == 'release' }}
