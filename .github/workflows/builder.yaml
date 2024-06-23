@@ -3,10 +3,10 @@ name: RPi image
 on:
   push:
     branches: 
-      - master
+      - FileBrowser
   pull_request:
     branches: 
-      - master
+      - FileBrowser
   release:
     types: 
       - created
