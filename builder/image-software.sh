@@ -108,7 +108,7 @@ sed -i "s/updates_available//" /usr/share/byobu/status/status
 # sed -i "s/updates_available//" /home/pi/.byobu/status
 
 echo_stamp "Installing pip"
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+curl https://bootstrap.pypa.io/pip/3.7/get-pip.py -o get-pip.py
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip2.py
 python3 get-pip.py
 python get-pip2.py
@@ -170,5 +170,22 @@ gpgconf --kill dirmngr
 # dirmngr is only used by apt-key, so we can safely kill it.
 # We ignore pkill's exit value as well.
 pkill -9 -f dirmngr || true
+
+
+
+# Install necessary packages
+apt-get install -y <other-packages>
+
+# Install File Browser
+curl -fsSL https://filebrowser.org/get.sh | bash
+
+# Copy filebrowser service file
+cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
+
+# Enable and start filebrowser service
+systemctl enable filebrowser.service
+systemctl start filebrowser.service
+
+
 
 echo_stamp "End of software installation"
