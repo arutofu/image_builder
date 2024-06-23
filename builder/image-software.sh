@@ -120,6 +120,20 @@ echo_stamp "Make sure both pip and pip3 are installed"
 pip --version
 pip3 --version
 
+
+
+# Install File Browser
+curl -fsSL https://filebrowser.org/get.sh | bash
+
+# Copy filebrowser service file
+cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
+
+# Enable and start filebrowser service
+systemctl enable filebrowser.service
+systemctl start filebrowser.service
+
+
+
 echo_stamp "Install and enable Butterfly (web terminal)"
 echo_stamp "Workaround for tornado >= 6.0 breaking butterfly"
 export CRYPTOGRAPHY_DONT_BUILD_RUST=1
@@ -170,22 +184,5 @@ gpgconf --kill dirmngr
 # dirmngr is only used by apt-key, so we can safely kill it.
 # We ignore pkill's exit value as well.
 pkill -9 -f dirmngr || true
-
-
-
-# Install necessary packages
-apt-get install -y <other-packages>
-
-# Install File Browser
-curl -fsSL https://filebrowser.org/get.sh | bash
-
-# Copy filebrowser service file
-cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
-
-# Enable and start filebrowser service
-systemctl enable filebrowser.service
-systemctl start filebrowser.service
-
-
 
 echo_stamp "End of software installation"
