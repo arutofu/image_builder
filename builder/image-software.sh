@@ -121,12 +121,12 @@ pip --version
 pip3 --version
 
 
-
 # Install File Browser
-curl -fsSL https://filebrowser.org/get.sh | bash
+echo_stamp "Installing File Browser"
+curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
 # Copy filebrowser service file
-cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
+cp builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
 
 # Enable and start filebrowser service
 systemctl enable filebrowser.service
