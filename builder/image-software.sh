@@ -122,13 +122,18 @@ pip3 --version
 
 
 # Install File Browser
-echo_stamp "Installing File Browser"
-curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+# Поиск файла filebrowser.service и копирование его в нужное место
+echo_stamp "Copy filebrowser service file"
+service_file=$(find / -name filebrowser.service 2>/dev/null | head -n 1)
+if [ -n "$service_file" ]; then
+    cp "$service_file" /etc/systemd/system/filebrowser.service
+    echo "filebrowser.service copied from $service_file"
+else
+    echo "filebrowser.service not found!"
+    exit 1
+fi
 
-# Copy filebrowser service file
-cp builder/assets/filebrowser.service /etc/systemd/system/filebrowser.service
-
-# Enable and start filebrowser service
+echo_stamp "Enable and start filebrowser service"
 systemctl enable filebrowser.service
 systemctl start filebrowser.service
 
