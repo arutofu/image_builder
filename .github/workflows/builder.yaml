@@ -21,53 +21,13 @@ jobs:
       - name: Set execute permissions
         run: chmod +x ./builder/*.sh && chmod +x ./builder/assets/*.sh
 
-      - name: Output event data for debugging
-        run: |
-          echo -e "\033[1;34mGitHub event data:\033[0m"
-          echo "${{ toJson(github.event) }}"
-
-      - name: Output TRAVIS_TAG value for debugging
-        run: |
-          if [ -z "${{ github.event.release.tag_name }}" ]; then
-            echo -e "\033[1;31mTRAVIS_TAG is empty!\033[0m"
-          else
-            echo -e "\033[1;32mTRAVIS_TAG=${{ github.event.release.tag_name }}\033[0m"
-          fi
-
-      - name: Check existence of builder script
-        run: |
-          if [ ! -f ./builder/image-build.sh ]; then
-            echo -e "\033[1;31mBuilder script not found!\033[0m"
-            exit 1
-          else
-            echo -e "\033[1;32mBuilder script found!\033[0m"
-          fi
-
       - name: Build image
         run: |
           docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo -e TRAVIS_TAG="${{ github.event.release.tag_name || '' }}" sfalexrog/img-tool:qemu-update /bin/bash -c "chmod +x /builder/repo/builder/image-build.sh && /builder/repo/builder/image-build.sh"
 
-      - name: Check existence of images directory
-        run: |
-          if [ ! -d ./images ]; then
-            echo -e "\033[1;31mImages directory not found!\033[0m"
-            exit 1
-          else
-            echo -e "\033[1;32mImages directory found!\033[0m"
-          fi
-
       - name: Compress image
         run: |
           cd images && sudo chmod -R 777 . && zip -9 image.zip *_* && ls -l . && unzip -l image.zip
-
-      - name: Check if image.zip is created
-        run: |
-          if [ ! -f images/image.zip ]; then
-            echo -e "\033[1;31mimage.zip not found!\033[0m"
-            exit 1
-          else
-            echo -e "\033[1;32mimage.zip created successfully!\033[0m"
-          fi
 
       - name: Upload image to release
         uses: softprops/action-gh-release@v1

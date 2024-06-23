@@ -3,9 +3,9 @@ Description=File Browser
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/filebrowser -r /home/pi
-User=pi
-Group=pi
+ExecStart=/usr/local/bin/filebrowser -r /home/pi --port 9090
+User=root
+Group=root
 Restart=on-failure
 
 [Install]
