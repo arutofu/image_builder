@@ -122,10 +122,15 @@ pip3 --version
 
 
 # Install File Browser
+# Вывод текущей директории
+current_dir=$(pwd)
+echo "Current directory: $current_dir"
+
 # Поиск файла filebrowser.service и копирование его в нужное место
 echo_stamp "Copy filebrowser service file"
 service_file=$(find / -name filebrowser.service 2>/dev/null | head -n 1)
 if [ -n "$service_file" ]; then
+    echo "Found filebrowser.service at: $service_file"
     cp "$service_file" /etc/systemd/system/filebrowser.service
     echo "filebrowser.service copied from $service_file"
 else
