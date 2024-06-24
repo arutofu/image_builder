@@ -35,8 +35,7 @@ echo_stamp() {
   echo -e ${TEXT}
 }
 
-#NEW_SSID='drone-'$(head -c 100 /dev/urandom | xxd -ps -c 100 | sed -e "s/[^0-9]//g" | cut -c 1-4)
-NEW_SSID="drone-00000"
+NEW_SSID='drone-'$(head -c 100 /dev/urandom | xxd -ps -c 100 | sed -e "s/[^0-9]//g" | cut -c 1-4)
 echo_stamp "Setting SSID to ${NEW_SSID}"
 # TODO: Use wpa_cli insted direct file edit
 # FIXME: We rely on raspberrypi-net-mods to copy our file to /etc/wpa_supplicant.

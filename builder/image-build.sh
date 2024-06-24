@@ -86,8 +86,6 @@ for dir in ${REPO_DIR}/*; do
   fi
 done
 
-
-
 # Копирование файла службы File Browser
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/filebrowser.service' '/etc/systemd/system/'
 # Настройка оборудования и установка File Browser
