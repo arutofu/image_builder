@@ -98,8 +98,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-
-
 # Monkey
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey' '/root/'
 # rsyslog config
@@ -117,20 +115,4 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-network.
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/avahi-services/sftp-ssh.service' '/etc/avahi/services'
 ${BUILDER_DIR}/image-resize.sh ${IMAGE_PATH}
 
-
-
-# Запуск службы File Browser вне chroot
-echo "Starting File Browser service outside of chroot"
-systemctl daemon-reload
-systemctl enable filebrowser.service
-systemctl start filebrowser.service
-systemctl status filebrowser.service
-
-# Проверка запуска File Browser
-sleep 5
-if ! netstat -tuln | grep 9090; then
-    echo "Error: File Browser is not running correctly."
-    exit 1
-fi
-
-echo "File Browser is running correctly."
+echo_stamp "Build completed successfully."
