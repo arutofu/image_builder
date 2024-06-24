@@ -89,9 +89,6 @@ if [ ! -f /usr/local/bin/filebrowser ]; then
     exit 1
 fi
 
-# Копирование файла службы File Browser
-cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/
-
 # Перезагрузка конфигурации systemd и запуск службы
 systemctl daemon-reload
 systemctl enable filebrowser.service

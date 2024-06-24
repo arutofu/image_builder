@@ -86,6 +86,20 @@ for dir in ${REPO_DIR}/*; do
   fi
 done
 
+
+
+# Копирование файла службы File Browser
+${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/filebrowser.service' '/etc/systemd/system/'
+# Настройка оборудования и установка File Browser
+echo_stamp "Setting up hardware and installing File Browser"
+${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/assets/hardware-setup.sh'
+if [ $? -ne 0 ]; then
+    echo "Hardware setup or File Browser installation failed. Stopping build."
+    exit 1
+fi
+
+
+
 # Monkey
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey' '/root/'
 # rsyslog config
@@ -99,8 +113,6 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/monkey.
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-software.sh'
 
 
-# Копирование файла службы File Browser
-${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/filebrowser.service' '/etc/systemd/system/'
 
 
 # network setup
@@ -109,13 +121,7 @@ ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/image-network.
 ${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} copy ${SCRIPTS_DIR}'/assets/avahi-services/sftp-ssh.service' '/etc/avahi/services'
 
 
-# Настройка оборудования и установка File Browser
-echo_stamp "Setting up hardware and installing File Browser"
-${BUILDER_DIR}/image-chroot.sh ${IMAGE_PATH} exec ${SCRIPTS_DIR}'/assets/hardware-setup.sh'
-if [ $? -ne 0 ]; then
-    echo "Hardware setup or File Browser installation failed. Stopping build."
-    exit 1
-fi
+
 
 
 ${BUILDER_DIR}/image-resize.sh ${IMAGE_PATH}
