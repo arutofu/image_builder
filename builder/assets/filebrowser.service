@@ -7,6 +7,8 @@ ExecStart=/usr/local/bin/filebrowser -r /home/pi --port 9090
 User=pi
 Group=pi
 Restart=on-failure
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

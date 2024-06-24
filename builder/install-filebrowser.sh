@@ -11,12 +11,18 @@ if [ ! -f /usr/local/bin/filebrowser ]; then
 fi
 
 # Проверка запуска File Browser
+echo "Starting File Browser for initial check"
 /usr/local/bin/filebrowser -r /home/pi --port 9090 &
 sleep 5
 
 # Проверка, что File Browser запущен и слушает порт
 if ! netstat -tuln | grep 9090; then
-    echo "Error: File Browser is not running correctly."
+    echo "Error: File Browser is not running correctly. Checking logs..."
+
+    # Проверка процессов и логов
+    ps aux | grep filebrowser
+    sudo journalctl -u filebrowser.service
+
     pkill filebrowser
     exit 1
 fi
