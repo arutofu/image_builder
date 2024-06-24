@@ -79,4 +79,32 @@ if ! grep -q "^bcm2835-v4l2" /etc/modules;
 then printf "bcm2835-v4l2\n" >> /etc/modules
 fi
 
-echo_stamp "#8 End of configure hardware interfaces"
+# 8. Установка File Browser
+echo_stamp "#8 Installing File Browser"
+curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+
+# Проверка успешности установки
+if [ ! -f /usr/local/bin/filebrowser ]; then
+    echo "Error: File Browser installation failed."
+    exit 1
+fi
+
+# Копирование файла службы File Browser
+cp /path/to/builder/assets/filebrowser.service /etc/systemd/system/
+
+# Перезагрузка конфигурации systemd и запуск службы
+systemctl daemon-reload
+systemctl enable filebrowser.service
+systemctl start filebrowser.service
+
+# Проверка, что File Browser запущен и слушает порт
+sleep 5
+if ! netstat -tuln | grep 9090; then
+    echo "Error: File Browser is not running correctly."
+    exit 1
+fi
+
+echo "File Browser installed and running correctly."
+
+
+echo_stamp "#9 End of configure hardware interfaces"
