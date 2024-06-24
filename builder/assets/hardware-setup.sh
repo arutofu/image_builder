@@ -89,19 +89,6 @@ if [ ! -f /usr/local/bin/filebrowser ]; then
     exit 1
 fi
 
-# Перезагрузка конфигурации systemd и запуск службы
-systemctl daemon-reload
-systemctl enable filebrowser.service
-systemctl start filebrowser.service
-
-# Проверка, что File Browser запущен и слушает порт
-sleep 5
-if ! netstat -tuln | grep 9090; then
-    echo "Error: File Browser is not running correctly."
-    exit 1
-fi
-
-echo "File Browser installed and running correctly."
-
+echo "File Browser installed successfully."
 
 echo_stamp "#9 End of configure hardware interfaces"
