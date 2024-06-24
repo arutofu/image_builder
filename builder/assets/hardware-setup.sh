@@ -1,25 +1,10 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
-#
-# Script for build the image. Used builder script of the target repo
-# For build: docker run --privileged -it --rm -v /dev:/dev -v $(pwd):/builder/repo smirart/builder
-#
-# Copyright (C) 2018 Copter Express Technologies
-#
-# Author: Artem Smirnov <urpylka@gmail.com>
-#
-# Distributed under MIT License (available at https://opensource.org/licenses/MIT).
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-
-set -e # Exit immidiately on non-zero result
+set -e # Exit immediately on non-zero result
 
 echo_stamp() {
   # TEMPLATE: echo_stamp <TEXT> <TYPE>
   # TYPE: SUCCESS, ERROR, INFO
-
-  # More info there https://www.shellhacks.com/ru/bash-colors/
 
   TEXT="$(date '+[%Y-%m-%d %H:%M:%S]') $1"
   TEXT="\e[1m$TEXT\e[0m" # BOLD
@@ -42,7 +27,6 @@ echo_stamp() {
 # 1. Enable sshd
 echo_stamp "#1 Turn on sshd"
 touch /boot/ssh
-# /usr/bin/raspi-config nonint do_ssh 0
 
 # 2. Enable GPIO
 echo_stamp "#2 GPIO enabled by default"
@@ -61,22 +45,15 @@ echo_stamp "#5 Turn on raspicam"
 
 # 6. Enable hardware UART
 echo_stamp "#6 Turn on UART"
-# Temporary solution
-# https://github.com/RPi-Distro/raspi-config/pull/75
 /usr/bin/raspi-config nonint do_serial 1
 /usr/bin/raspi-config nonint set_config_var enable_uart 1 /boot/config.txt
 echo dtoverlay=pi3-disable-bt >> /boot/config.txt
 systemctl disable hciuart.service
 
-# After adding to Raspbian OS
-# https://github.com/RPi-Distro/raspi-config/commit/d6d9ecc0d9cbe4aaa9744ae733b9cb239e79c116
-#/usr/bin/raspi-config nonint do_serial 2
-
-# 7. Enable V4L driver http://robocraft.ru/blog/electronics/3158.html
-#echo "bcm2835-v4l2" >> /etc/modules
+# 7. Enable V4L driver
 echo_stamp "#7 Turn on v4l2 driver"
-if ! grep -q "^bcm2835-v4l2" /etc/modules;
-then printf "bcm2835-v4l2\n" >> /etc/modules
+if ! grep -q "^bcm2835-v4l2" /etc/modules; then
+    printf "bcm2835-v4l2\n" >> /etc/modules
 fi
 
 # 8. Установка File Browser
@@ -89,6 +66,12 @@ if [ ! -f /usr/local/bin/filebrowser ]; then
     exit 1
 fi
 
+# Создание файла базы данных и установка прав
+echo_stamp "#9 Создание файла базы данных и установка прав"
+touch /home/pi/filebrowser.db
+chown pi:pi /home/pi/filebrowser.db
+chmod 644 /home/pi/filebrowser.db
+
 echo "File Browser installed successfully."
 
-echo_stamp "#9 End of configure hardware interfaces"
+echo_stamp "#10 End of configure hardware interfaces"
