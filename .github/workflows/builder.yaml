@@ -23,7 +23,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo -e TRAVIS_TAG="${{ github.event.release.tag_name || '' }}" sfalexrog/img-tool:qemu-update /bin/bash -c "chmod +x /builder/repo/builder/image-build.sh && /builder/repo/builder/image-build.sh"
+          docker run --privileged --rm -v /dev:/dev -v $(pwd):/builder/repo -e TRAVIS_TAG="${{ github.event.release.tag_name || '' }}" arutofu/img-tool:qemu-update /bin/bash -c "chmod +x /builder/repo/builder/image-build.sh && /builder/repo/builder/image-build.sh"
 
       - name: Compress image
         run: |
