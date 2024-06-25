@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - CopyDockerImage_copy
-
+  workflow_dispatch:
+  
 jobs:
   copy-image:
     runs-on: ubuntu-latest
