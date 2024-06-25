@@ -3,10 +3,10 @@ name: RPi image
 on:
   push:
     branches: 
-      - OwnDockerImage
+      - master
   pull_request:
     branches: 
-      - OwnDockerImage
+      - master
   release:
     types: 
       - created
@@ -27,7 +27,9 @@ jobs:
 
       - name: Compress image
         run: |
-          cd images && sudo chmod -R 777 . && zip -9 image.zip *_* && ls -l . && unzip -l image.zip
+          cd images && sudo chmod -R 777 . 
+          TAG_NAME="${{ github.event.release.tag_name || 'no_release_tag' }}"
+          zip -9 "image_${TAG_NAME}.zip" *_* && ls -l . && unzip -l "image_${TAG_NAME}.zip"
 
       - name: Upload image to release
         uses: softprops/action-gh-release@v1
