@@ -3,10 +3,10 @@ name: RPi image
 on:
   push:
     branches: 
-      - FileBrowser
+      - OwnDockerImage
   pull_request:
     branches: 
-      - FileBrowser
+      - OwnDockerImage
   release:
     types: 
       - created
