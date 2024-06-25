@@ -42,14 +42,13 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        cd docker_image
         git init
         git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/arutofu/image_builder_v2.git
         git checkout -b CopyDockerImage
         git add .
         git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
         git pull origin CopyDockerImage --rebase
-        for i in {1..5}; do git push -u origin CopyDockerImage && break || sleep 15; done
+        for i in {1..5}; do git push -u origin CopyDockerImage && break || sleep 5; done
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
