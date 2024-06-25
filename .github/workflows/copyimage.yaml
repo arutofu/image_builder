@@ -1,4 +1,4 @@
-name: Copy Docker Image
+name: Copy Docker Image v2
 
 on:
   push:
