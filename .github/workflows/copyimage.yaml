@@ -1,6 +1,9 @@
 name: Copy Docker Image v2
 
 on:
+  push:
+    branches:
+      - CopyDockerImage_copy
   workflow_dispatch:
   
 jobs:
