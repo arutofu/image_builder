@@ -3,7 +3,7 @@ name: Copy Docker Image
 on:
   push:
     branches:
-      - CopyDockerImage
+      - CopyDockerImage_copy
 
 jobs:
   copy-image:
