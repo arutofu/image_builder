@@ -108,7 +108,7 @@ sed -i "s/updates_available//" /usr/share/byobu/status/status
 # sed -i "s/updates_available//" /home/pi/.byobu/status
 
 echo_stamp "Installing pip"
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+curl https://bootstrap.pypa.io/pip/3.7/get-pip.py -o get-pip.py
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip2.py
 python3 get-pip.py
 python get-pip2.py
@@ -119,6 +119,31 @@ rm get-pip.py get-pip2.py
 echo_stamp "Make sure both pip and pip3 are installed"
 pip --version
 pip3 --version
+
+
+# Install File Browser
+# Вывод текущей директории
+
+#current_dir=$(pwd)
+#echo "Current directory: $current_dir"
+
+# Поиск файла filebrowser.service и копирование его в нужное место
+#echo_stamp "Copy filebrowser service file"
+#service_file=$(find / -name filebrowser.service 2>/dev/null | head -n 1)
+#if [ -n "$service_file" ]; then
+#    echo "Found filebrowser.service at: $service_file"
+#    cp "$service_file" /etc/systemd/system/filebrowser.service
+#    echo "filebrowser.service copied from $service_file"
+#else
+#    echo "filebrowser.service not found!"
+#    exit 1
+#fi
+
+#echo_stamp "Enable and start filebrowser service"
+#systemctl enable filebrowser.service
+#systemctl start filebrowser.service
+
+
 
 echo_stamp "Install and enable Butterfly (web terminal)"
 echo_stamp "Workaround for tornado >= 6.0 breaking butterfly"
