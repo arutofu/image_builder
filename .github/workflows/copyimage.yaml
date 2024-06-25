@@ -25,7 +25,7 @@ jobs:
     - name: Export Docker container contents
       run: |
         mkdir -p ./docker_image
-        docker export temp_container | tar -C ./docker_image -xvf -
+        docker export temp_container | tar --exclude='var/lib/dpkg/info/*.?' -C ./docker_image -xvf -
 
     - name: Configure Git
       run: |
@@ -34,14 +34,13 @@ jobs:
 
     - name: Commit and push to repository
       run: |
-        cd docker_image
-        git init
-        git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/arutofu/image_builder_v2.git
-        git checkout -b CopyDockerImage
-        git add .
+        git pull origin CopyDockerImage
+        git add .github
+        git add docker_image
         git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
-        git pull origin CopyDockerImage --rebase
-        git push -u origin CopyDockerImage
+        git push origin CopyDockerImage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: Remove temporary Docker container
       run: docker rm temp_container
