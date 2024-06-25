@@ -35,7 +35,6 @@ jobs:
 
     - name: Commit and push to repository
       run: |
-        cd docker_image
         git init
         git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/arutofu/image_builder_v2.git
         git checkout -b CopyDockerImage_copy
