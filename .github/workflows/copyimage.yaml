@@ -36,7 +36,7 @@ jobs:
       run: |
         cd docker_image
         git init
-        git remote add origin https://github.com/arutofu/image_builder_v2.git
+        git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/arutofu/image_builder_v2.git
         git checkout -b CopyDockerImage
         git add .
         git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
