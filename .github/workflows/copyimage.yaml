@@ -16,7 +16,31 @@ jobs:
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Check if Docker image exists
+    - name: Pull Docker image
+      run: docker pull sfalexrog/img-tool:qemu-update
+
+    - name: Create Docker container
+      run: docker create --name temp_container sfalexrog/img-tool:qemu-update
+
+    - name: Export Docker container contents
+      run: |
+        mkdir -p ./docker_image
+        docker export temp_container | tar -C ./docker_image -xvf -
+
+    - name: Commit and push to repository
+      run: |
+        cd docker_image
+        git init
+        git remote add origin https://github.com/arutofu/image_builder_v2.git
+        git checkout -b CopyDockerImage
+        git add .
+        git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
+        git push -u origin CopyDockerImage
+
+    - name: Remove temporary Docker container
+      run: docker rm temp_container
+
+    - name: Check if Docker image exists in my Docker Hub
       id: image-check
       run: |
         if docker pull arutofu/img-tool:qemu-update; then
@@ -26,32 +50,6 @@ jobs:
           echo "Image does not exist."
           echo "image_exists=false" >> $GITHUB_ENV
         fi
-
-    - name: Pull Docker image if it doesn't exist
-      if: env.image_exists == 'false'
-      run: docker pull sfalexrog/img-tool:qemu-update
-
-    - name: Create Docker container
-      if: env.image_exists == 'false'
-      run: docker create --name temp_container sfalexrog/img-tool:qemu-update
-
-    - name: Export Docker container contents
-      if: env.image_exists == 'false'
-      run: docker export temp_container | tar -C ./docker_image -xvf -
-
-    - name: Commit and push to repository
-      if: env.image_exists == 'false'
-      run: |
-        cd docker_image
-        git init
-        git remote add origin https://github.com/arutofu/image_builder_v2.git
-        git add .
-        git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
-        git push -u origin CopyDockerImage
-
-    - name: Remove temporary Docker container
-      if: env.image_exists == 'false'
-      run: docker rm temp_container
 
     - name: Build and push Docker image to my Docker Hub
       if: env.image_exists == 'false'
