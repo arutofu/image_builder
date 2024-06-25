@@ -1,7 +1,9 @@
 name: Copy Docker Image v1
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # runs weekly
+  workflow_dispatch:  # allows to run this workflow manually
 
 jobs:
   copy-image:
