@@ -41,6 +41,8 @@ jobs:
         git add .
         git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
         git push -u origin CopyDockerImage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: Remove temporary Docker container
       run: docker rm temp_container
