@@ -36,14 +36,14 @@ jobs:
       run: |
         cd docker_image
         git init
-        git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/arutofu/image_builder_v2.git
+        git remote add origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/arutofu/image_builder_v2.git
         git checkout -b CopyDockerImage
         git add .
         git commit -m "Add files from Docker image sfalexrog/img-tool:qemu-update"
         git pull origin CopyDockerImage --rebase
         git push -u origin CopyDockerImage
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: Remove temporary Docker container
       run: docker rm temp_container
